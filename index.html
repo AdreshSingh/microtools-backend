@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microtools - Home</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6cfaff;
+      --primary-dark: #1a4d80;
+      --bg: linear-gradient(135deg, #23243a 0%, #2e1e3a 100%);
+      --card-bg: rgba(30, 32, 48, 0.98);
+      --text: #f3e9d2;
+      --border: #7fffd4;
+      --shadow: 0 0 32px 8px #00eaff44, 0 4px 32px #000a;
+      --transition: 0.3s;
+      --icon-size: 2.2em;
+      --glow: 0 0 8px 2px #00eaff99, 0 0 24px 4px #00eaff33;
+      --btn-glow: 0 0 8px 2px #ffe06699, 0 0 24px 4px #ffe06633;
+      --fantasy-font: 'UnifrakturCook', 'Inter', Arial, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --primary: #6cfaff;
+      --primary-dark: #1a4d80;
+      --bg: linear-gradient(135deg, #181a1b 0%, #2e1e3a 100%);
+      --card-bg: rgba(30, 32, 48, 0.98);
+      --text: #f3e9d2;
+      --border: #7fffd4;
+      --shadow: 0 0 32px 8px #00eaff44, 0 4px 32px #000a;
+      --glow: 0 0 8px 2px #00eaff99, 0 0 24px 4px #00eaff33;
+      --btn-glow: 0 0 8px 2px #ffe06699, 0 0 24px 4px #ffe06633;
+      --fantasy-font: 'UnifrakturCook', 'Inter', Arial, sans-serif;
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', Arial, sans-serif;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5em 1em 1em 1em;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-size: 1.7em;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .brand-icon {
+      font-size: 1.3em;
+      color: var(--primary);
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--border);
+      border-radius: 24px;
+      transition: background var(--transition);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: var(--primary);
+      border-radius: 50%;
+      transition: transform var(--transition), background var(--transition);
+    }
+
+    input:checked+.slider {
+      background: var(--primary-dark);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(20px);
+      background: var(--primary);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1em 2em 1em;
+    }
+
+    .section-title {
+      font-size: 1.3em;
+      font-weight: 600;
+      margin: 1.5em 0 1em 0;
+      letter-spacing: 0.01em;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.5em;
+      margin-top: 1em;
+      margin-bottom: 2em;
+      transition: grid-template-columns var(--transition);
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--border);
+      padding: 2.2em 1.2em 1.2em 1.2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      transition: background var(--transition), box-shadow var(--transition), border-color var(--transition), color var(--transition), transform 0.18s;
+      position: relative;
+      min-height: 180px;
+      outline: none;
+    }
+
+    .tool-card:focus,
+    .tool-card:hover {
+      background: rgba(51, 153, 255, 0.08);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(51, 153, 255, 0.13);
+    }
+
+    .tool-icon {
+      font-size: var(--icon-size);
+      margin-bottom: 0.7em;
+      color: var(--primary);
+      transition: color var(--transition);
+    }
+
+    .tool-title {
+      font-size: 1.13em;
+      font-weight: 600;
+      margin-bottom: 0.3em;
+      letter-spacing: 0.01em;
+    }
+
+    .tool-desc {
+      font-size: 0.98em;
+      color: #888;
+      margin-bottom: 0.2em;
+      min-height: 2.2em;
+    }
+
+    .spinner {
+      display: none;
+      margin: 2em auto 0 auto;
+      width: 38px;
+      height: 38px;
+      border: 5px solid var(--primary);
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .main,
+      .app-header {
+        max-width: 99vw;
+        padding: 0.5em;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 1em;
+      }
+
+      .tool-card {
+        min-height: 140px;
+        padding: 1.5em 0.7em 1em 0.7em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="app-header">
+    <span class="brand"><span class="brand-icon" aria-hidden="true">🛠️</span> Microtools</span>
+    <div class="toggle-switch">
+      <label class="visually-hidden" for="themeSwitch">Toggle light/dark mode</label>
+      <span aria-hidden="true" style="font-size:1.2em;">🌙</span>
+      <label class="switch">
+        <input type="checkbox" id="themeSwitch" aria-checked="false" tabindex="0">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </header>
+  <main class="main">
+    <h2 class="section-title">Tools</h2>
+    <div class="tools-grid" id="toolsGrid">
+      <!-- Tool cards will be rendered here by JS -->
+    </div>
+    <div class="spinner" id="globalSpinner"></div>
+  </main>
+  <script>
+    // Tool definitions (can be moved to a separate JS file/module later)
+    const tools = [
+      {
+        title: 'Compress PDF',
+        desc: 'Reduce PDF file size while keeping quality.',
+        icon: '🗜️',
+        link: 'frontend/tools/pdf-compress/',
+      },
+      {
+        title: 'Merge PDF',
+        desc: 'Combine multiple PDFs into one.',
+        icon: '📑',
+        link: 'frontend/tools/pdf-merge/',
+      },
+      {
+        title: 'Convert JPG to PDF',
+        desc: 'Turn JPG images into a single PDF.',
+        icon: '🖼️',
+        link: 'frontend/tools/jpg-to-pdf/',
+      },
+      {
+        title: 'Resize Image',
+        desc: 'Change the size of your images easily.',
+        icon: '📏',
+        link: 'frontend/tools/resize-image/',
+      },
+      {
+        title: 'Convert PNG to JPG',
+        desc: 'Quickly convert PNG images to JPG.',
+        icon: '🌄',
+        link: 'frontend/tools/png-to-jpg/',
+      },
+    ];
+
+    // Render tool cards
+    const grid = document.getElementById('toolsGrid');
+    tools.forEach(tool => {
+      const a = document.createElement('a');
+      a.className = 'tool-card';
+      a.href = tool.link;
+      a.tabIndex = 0;
+      a.setAttribute('role', 'link');
+      a.setAttribute('aria-label', tool.title + ': ' + tool.desc);
+      a.innerHTML = `
+        <span class="tool-icon" aria-hidden="true">${tool.icon}</span>
+        <span class="tool-title">${tool.title}</span>
+        <span class="tool-desc">${tool.desc}</span>
+      `;
+      a.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') a.click();
+      });
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.body.style.opacity = 0;
+        setTimeout(() => { window.location = a.href; }, 350);
+      });
+      grid.appendChild(a);
+    });
+
+    // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    const html = document.documentElement;
+    function setTheme(dark) {
+      html.setAttribute('data-theme', dark ? 'dark' : 'light');
+      themeSwitch.checked = dark;
+      themeSwitch.setAttribute('aria-checked', dark ? 'true' : 'false');
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+    themeSwitch.addEventListener('change', () => setTheme(themeSwitch.checked));
+    // Load theme: prefer saved, else system preference
+    (() => {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || saved === 'light') {
+        setTheme(saved === 'dark');
+      } else {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark);
+      }
+    })();
+
+    // Minimal global spinner for navigation/loading (can be reused in tool pages)
+    function showSpinner(show = true) {
+      document.getElementById('globalSpinner').style.display = show ? 'block' : 'none';
+    }
+    // Example: showSpinner(true); setTimeout(()=>showSpinner(false), 1200);
+
+    // Optional: Animate page transitions (fade in)
+    if (!window.performance || !performance.getEntriesByType('navigation').some(e => e.type === 'back_forward')) {
+      document.body.style.opacity = 0;
+    }
+    document.body.style.transition = 'opacity 0.4s';
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.style.opacity = 1;
+    });
+  </script>
+</body>
+
+</html>
