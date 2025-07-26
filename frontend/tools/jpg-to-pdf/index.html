@@ -7,6 +7,7 @@
   <title>Convert JPG to PDF - Microtools</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap">
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  </link>
   <style>
     :root {
       --primary: #6cfaff;
@@ -351,128 +352,158 @@
         font-size: 1em;
       }
     }
+  </style>
+</head>
 
-    </link></head><body><div class="tool-container" id="mainContainer"><div class="tool-header"><button class="back-btn" onclick="window.location='../../index.html'" aria-label="Back to home">←</button><span class="tool-title">🖼️ Convert JPG to PDF</span><div class="toggle-switch"><label class="visually-hidden" for="themeSwitch">Toggle light/dark mode</label><span aria-hidden="true" style="font-size:1.2em;">🌙</span><label class="switch"><input type="checkbox" id="themeSwitch" aria-checked="false" tabindex="0"><span class="slider"></span></label></div></div><form id="pdfForm" autocomplete="off" onsubmit="return false;"><label class="upload-box" id="uploadBox" tabindex="0" aria-label="Add JPG images"><span class="upload-icon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"
-    style="display:block;margin:0 auto;"><rect x="6" y="12" width="36" height="28" rx="4" fill="#3399ff" fill-opacity="0.13" /><rect x="10" y="16" width="28" height="20" rx="2" fill="#3399ff" fill-opacity="0.22" /><path d="M14 20h20v12H14z" fill="#3399ff" fill-opacity="0.35" /><rect x="6" y="12" width="36" height="28" rx="4" stroke="#3399ff" stroke-width="2" /></svg></span><span class="upload-box-label">Add JPG images</span><input type="file" id="fileInput" accept=".jpg,.jpeg" multiple aria-label="Select JPG images"></label><ul class="file-list" id="fileList" aria-live="polite"></ul><button type="button" class="upload-btn" id="uploadBtn" disabled>Convert to PDF</button><div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div><div class="spinner" id="spinner" style="display:none;"></div><div class="result" id="result"></div></form></div><script> // Theme toggle
-    const themeSwitch=document.getElementById('themeSwitch');
-    const html=document.documentElement;
+<body>
+  <div class="tool-container" id="mainContainer">
+    <div class="tool-header"><button class="back-btn" onclick="window.location='../../index.html'"
+        aria-label="Back to home">←</button><span class="tool-title">🖼️ Convert JPG to PDF</span>
+      <div class="toggle-switch"><label class="visually-hidden" for="themeSwitch">Toggle light/dark mode</label><span
+          aria-hidden="true" style="font-size:1.2em;">🌙</span><label class="switch"><input type="checkbox"
+            id="themeSwitch" aria-checked="false" tabindex="0"><span class="slider"></span></label></div>
+    </div>
+    <form id="pdfForm" autocomplete="off" onsubmit="return false;"><label class="upload-box" id="uploadBox" tabindex="0"
+        aria-label="Add JPG images"><span class="upload-icon" aria-hidden="true"><svg width="48" height="48"
+            viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;">
+            <rect x="6" y="12" width="36" height="28" rx="4" fill="#3399ff" fill-opacity="0.13" />
+            <rect x="10" y="16" width="28" height="20" rx="2" fill="#3399ff" fill-opacity="0.22" />
+            <path d="M14 20h20v12H14z" fill="#3399ff" fill-opacity="0.35" />
+            <rect x="6" y="12" width="36" height="28" rx="4" stroke="#3399ff" stroke-width="2" />
+          </svg></span><span class="upload-box-label">Add JPG images</span><input type="file" id="fileInput"
+          accept=".jpg,.jpeg" multiple aria-label="Select JPG images"></label>
+      <ul class="file-list" id="fileList" aria-live="polite"></ul><button type="button" class="upload-btn"
+        id="uploadBtn" disabled>Convert to PDF</button>
+      <div class="progress" id="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="spinner" id="spinner" style="display:none;"></div>
+      <div class="result" id="result"></div>
+    </form>
+  </div>
+  <script> // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    const html = document.documentElement;
 
     function setTheme(dark) {
       html.setAttribute('data-theme', dark ? 'dark' : 'light');
-      themeSwitch.checked=dark;
+      themeSwitch.checked = dark;
       themeSwitch.setAttribute('aria-checked', dark ? 'true' : 'false');
       localStorage.setItem('theme', dark ? 'dark' : 'light');
     }
 
-    themeSwitch.addEventListener('change', ()=> setTheme(themeSwitch.checked));
+    themeSwitch.addEventListener('change', () => setTheme(themeSwitch.checked));
 
     // Initialize theme
-    (()=> {
-        const saved=localStorage.getItem('theme');
-        setTheme(saved==='dark');
-      })();
+    (() => {
+      const saved = localStorage.getItem('theme');
+      setTheme(saved === 'dark');
+    })();
 
     // File input system
-    const fileInput=document.getElementById('fileInput');
-    const fileList=document.getElementById('fileList');
-    const uploadBtn=document.getElementById('uploadBtn');
-    const uploadBox=document.getElementById('uploadBox');
-    const progress=document.getElementById('progress');
-    const progressBar=document.getElementById('progressBar');
-    const spinner=document.getElementById('spinner');
-    const result=document.getElementById('result');
-    let files=[];
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadBox = document.getElementById('uploadBox');
+    const progress = document.getElementById('progress');
+    const progressBar = document.getElementById('progressBar');
+    const spinner = document.getElementById('spinner');
+    const result = document.getElementById('result');
+    let files = [];
 
     function updateFileList() {
-      fileList.innerHTML='';
+      fileList.innerHTML = '';
 
-      files.forEach((file, idx)=> {
-          const li=document.createElement('li');
-          li.className='file-item';
-          li.tabIndex=0;
+      files.forEach((file, idx) => {
+        const li = document.createElement('li');
+        li.className = 'file-item';
+        li.tabIndex = 0;
 
-          li.innerHTML=`<span class="file-name" >$ {
+        li.innerHTML = `<span class="file-name" >$ {
             file.name
           }
 
           </span>` + `<button type="button" class="remove-btn" aria-label="Remove ${file.name}" tabindex="0" >✖</button>`;
 
-          li.querySelector('.remove-btn').onclick=()=> {
-            files.splice(idx, 1);
-            updateFileList();
-          }
+        li.querySelector('.remove-btn').onclick = () => {
+          files.splice(idx, 1);
+          updateFileList();
+        }
 
           ;
-          fileList.appendChild(li);
-        });
-      uploadBtn.disabled=files.length < 1;
+        fileList.appendChild(li);
+      });
+      uploadBtn.disabled = files.length < 1;
     }
 
-    fileInput.addEventListener('change', e=> {
-        for (const file of e.target.files) {
-          if ((file.type==='image/jpeg' || file.name.toLowerCase().endsWith ('.jpg') || file.name.toLowerCase().endsWith ('.jpeg')) && !files.some(f=> f.name===file.name)) {
-            files.push(file);
-          }
+    fileInput.addEventListener('change', e => {
+      for (const file of e.target.files) {
+        if ((file.type === 'image/jpeg' || file.name.toLowerCase().endsWith('.jpg') || file.name.toLowerCase().endsWith('.jpeg')) && !files.some(f => f.name === file.name)) {
+          files.push(file);
         }
+      }
 
-        updateFileList();
-        fileInput.value='';
-      });
+      updateFileList();
+      fileInput.value = '';
+    });
 
-    uploadBox.addEventListener('keydown', e=> {
-        if (e.key==='Enter' || e.key===' ') {
-          fileInput.click();
+    uploadBox.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        fileInput.click();
+      }
+    });
+
+    uploadBox.addEventListener('click', () => fileInput.click());
+
+    uploadBox.addEventListener('dragover', e => {
+      e.preventDefault();
+      uploadBox.classList.add('hover');
+    });
+
+    uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('hover'));
+
+    uploadBox.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadBox.classList.remove('hover');
+
+      for (const file of e.dataTransfer.files) {
+        if ((file.type === 'image/jpeg' || file.name.toLowerCase().endsWith('.jpg') || file.name.toLowerCase().endsWith('.jpeg')) && !files.some(f => f.name === file.name)) {
+          files.push(file);
         }
-      });
+      }
 
-    uploadBox.addEventListener('click', ()=> fileInput.click());
-
-    uploadBox.addEventListener('dragover', e=> {
-        e.preventDefault();
-        uploadBox.classList.add('hover');
-      });
-
-    uploadBox.addEventListener('dragleave', ()=> uploadBox.classList.remove('hover'));
-
-    uploadBox.addEventListener('drop', e=> {
-        e.preventDefault();
-        uploadBox.classList.remove('hover');
-
-        for (const file of e.dataTransfer.files) {
-          if ((file.type==='image/jpeg' || file.name.toLowerCase().endsWith ('.jpg') || file.name.toLowerCase().endsWith ('.jpeg')) && !files.some(f=> f.name===file.name)) {
-            files.push(file);
-          }
-        }
-
-        updateFileList();
-      });
+      updateFileList();
+    });
 
     // Upload logic (placeholder)
-    uploadBtn.addEventListener('click', async ()=> {
-        result.innerHTML='';
-        progress.style.display='block';
-        progressBar.style.width='0%';
-        spinner.style.display='block';
-        uploadBtn.disabled=true;
+    uploadBtn.addEventListener('click', async () => {
+      result.innerHTML = '';
+      progress.style.display = 'block';
+      progressBar.style.width = '0%';
+      spinner.style.display = 'block';
+      uploadBtn.disabled = true;
 
-        let progressVal=0;
+      let progressVal = 0;
 
-        const progressInt=setInterval(()=> {
-            progressVal=Math.min(progressVal + Math.random() * 20, 90);
-            progressBar.style.width=progressVal + '%';
-          }
+      const progressInt = setInterval(() => {
+        progressVal = Math.min(progressVal + Math.random() * 20, 90);
+        progressBar.style.width = progressVal + '%';
+      }
 
-          , 200);
+        , 200);
 
-        setTimeout(()=> {
-            clearInterval(progressInt);
-            progressBar.style.width='100%';
-            spinner.style.display='none';
-            progress.style.display='none';
-            uploadBtn.disabled=false;
-            result.innerHTML='<span style="color:var(--primary);font-weight:500;">(Placeholder) JPGs converted to PDF! Download link will appear here.</span>';
-          }
+      setTimeout(() => {
+        clearInterval(progressInt);
+        progressBar.style.width = '100%';
+        spinner.style.display = 'none';
+        progress.style.display = 'none';
+        uploadBtn.disabled = false;
+        result.innerHTML = '<span style="color:var(--primary);font-weight:500;">(Placeholder) JPGs converted to PDF! Download link will appear here.</span>';
+      }
 
-          , 1800);
-      });
-    </script></body></html>
+        , 1800);
+    });
+  </script>
+</body>
+
+</html>
